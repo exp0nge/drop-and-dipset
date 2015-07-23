@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>drop&dip</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.4/angular.min.js"></script>
+    <script src="app.js"></script>
+    <script src="main.ctrl.js"></script>
+</head>
+<body ng-app="app" ng-controller="MainController as main">
+ <div class="container">
+        <h1>{{main.title}}</h1>
+    <form name="main.addForm" class="form" ng-submit="main.addNote()">
+        <div class="form-group">
+            <label>Note:</label>
+            <input type="text" class="form-control" ng-model="main.newNote.content" required />
+        </div>
+    </form>
+    <div class="page-header">drops</div>
+    <ul ng-repeat="note in main.notes track by $id($index)"><li>{{note.content}}<span class="badge right">{{note.date | date:'medium'}}</span></li></ul>
+    
+    
+    </div>
+    
+</body>
+</html>
