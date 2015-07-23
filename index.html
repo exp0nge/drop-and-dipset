@@ -14,12 +14,13 @@
     <form name="main.addForm" class="form" ng-submit="main.addNote()">
         <div class="form-group">
             <label>Note:</label>
-            <input type="text" class="form-control" ng-model="main.newNote.content" required />
+            <input  rows="3" type="text" class="form-control" ng-model="main.newNote.content" required />
         </div>
     </form>
     <div class="page-header">drops</div>
-    <ul ng-repeat="note in main.notes track by $id($index)"><li>{{note.content}}<span class="badge right">{{note.date | date:'medium'}}</span></li></ul>
-    
+    <div class="well">
+    <ul class="list-group" ng-repeat="note in main.notes track by $id($index)"><li class="list-group-item">{{note.content}}<span class="badge right">{{note.date | date:'medium'}}</span></li></ul>
+    </div>
     
     </div>
     
