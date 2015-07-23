@@ -17,10 +17,12 @@
             <input  rows="3" type="text" class="form-control" ng-model="main.newNote.content" required placeholder="drop and hit enter..." />
         </div>
     </form>
-    <div class="alert alert-success" ng-show="main.noteAdded" class="ng-hide"><strong>Success!</strong></div>
+    <div class="alert alert-success" ng-show="main.noteAdded" class="ng-hide"><strong>Dipset!</strong></div>
     <div class="page-header">drops</div>
     <div class="well">
-    <ul class="list-group" ng-repeat="note in main.notes track by $id($index)"><li class="list-group-item">{{note.content}}<span class="badge right">{{note.date | date:'medium'}}</span></li></ul>
+    <ul class="list-group" ng-repeat="note in main.notes | orderBy: 'date':true track by $id($index)">
+        <li class="list-group-item">{{note.content}}<span class="badge right">{{note.date | date:'medium'}}</span></li>
+        </ul>
     </div>
     
     </div>
