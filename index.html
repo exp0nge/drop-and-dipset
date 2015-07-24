@@ -3,6 +3,7 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>drop&dip</title>
+    <link rel="icon" href="dropdip.png" sizes="32x32">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.4/angular.min.js"></script>
     <script src="app.js"></script>
@@ -10,7 +11,7 @@
 </head>
 <body ng-app="app" ng-controller="MainController as main">
  <div class="container">
-        <h1>{{main.title}}</h1>
+    <h1><img src="dropdip.png" height="60px" widith="60px"></img>{{main.title}}</h1>
     <form name="main.addForm" class="form" ng-submit="main.addNote()">
         <div class="form-group">
             <label>Note:</label>
@@ -24,7 +25,7 @@
     <div class="well">
     <ul class="list-group" ng-repeat="note in main.notes | orderBy: 'date':true track by $id($index)">
         <li class="list-group-item">{{note.content}}<span class="badge right">{{note.date | date:'medium'}}</span>
-        </br><a class="label label-danger" ng-click="main.delete(note)">Delete</a></li>
+        <a class="badge right" ng-click="main.delete(note)">Delete</a></li>
         </ul>
     </div>
     
