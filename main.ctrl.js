@@ -17,6 +17,10 @@ angular.module('app').controller("MainController", function($timeout){
         vm.noteAdded = true;
         $timeout(function(){vm.noteAdded = false;}, 3000);
     };
+    vm.delete = function(note){
+        vm.notes.splice(vm.notes.indexOf(note), 1);
+        window.localStorage.setItem('storedNotes', JSON.stringify(vm.notes));
+    };
     
 
 });

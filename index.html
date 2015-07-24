@@ -21,7 +21,8 @@
     <div class="page-header">drops</div>
     <div class="well">
     <ul class="list-group" ng-repeat="note in main.notes | orderBy: 'date':true track by $id($index)">
-        <li class="list-group-item">{{note.content}}<span class="badge right">{{note.date | date:'medium'}}</span></li>
+        <li class="list-group-item">{{note.content}}<span class="badge right">{{note.date | date:'medium'}}</span>
+        </br><a class="label label-danger" ng-click="main.delete(note)">Delete</a></li>
         </ul>
     </div>
     
