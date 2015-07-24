@@ -19,9 +19,10 @@
         </div>
     </form>
     <div class="alert alert-success" ng-show="main.noteAdded" class="ng-hide"><strong>Dipset!</strong></div>
-    <div class="page-header">drops
-    <div align="right"><button class="btn btn-primary" ng-click="main.download()" ng-show="main.notes.length > 0">grab drops</button>
-    </div></div>
+    <div class="page-header">
+        <a class="glyphicon glyphicon-save" ng-click="main.download()" ng-show="main.notes.length > 0"></a>
+        drops
+        </div>
     </br>
     <div class="well">
     <div class="input-group" ng-show="main.notes.length > 0">
