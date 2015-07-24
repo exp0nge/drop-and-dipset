@@ -19,6 +19,8 @@
     </form>
     <div class="alert alert-success" ng-show="main.noteAdded" class="ng-hide"><strong>Dipset!</strong></div>
     <div class="page-header">drops</div>
+    <div align="right"><button class="btn btn-primary" ng-click="main.download()" ng-show="main.notes.length > 0">grab drops</button></div>
+    </br>
     <div class="well">
     <ul class="list-group" ng-repeat="note in main.notes | orderBy: 'date':true track by $id($index)">
         <li class="list-group-item">{{note.content}}<span class="badge right">{{note.date | date:'medium'}}</span>

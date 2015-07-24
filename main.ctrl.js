@@ -21,6 +21,10 @@ angular.module('app').controller("MainController", function($timeout){
         vm.notes.splice(vm.notes.indexOf(note), 1);
         window.localStorage.setItem('storedNotes', JSON.stringify(vm.notes));
     };
+    vm.download = function(){
+        var blob = new Blob([JSON.stringify(vm.notes)], {type: 'application/json; charset=utf-8;'});
+        window.location.href = (window.URL || window.webkitURL).createObjectURL( blob );
+    };
     
 
 });
