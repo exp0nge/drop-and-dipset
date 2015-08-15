@@ -26,9 +26,6 @@ app.controller("MainController", ['$timeout', 'login', 'logout', function($timeo
         window.location.href = (window.URL || window.webkitURL).createObjectURL( blob );
     };
     vm.loginFormData = {};
-    vm.showLogin = function(){
-        vm.loginForm = true;
-    };
     vm.login = function(){
         login.login(vm.loginFormData).then(function(response){
             vm.loginForm = false;
