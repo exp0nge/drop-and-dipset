@@ -1,4 +1,4 @@
-angular.module('app').controller("MainController", function($timeout){
+app.controller("MainController", ['$timeout', 'login', 'logout', function($timeout, login, logout){
     var vm = this;
     vm.title = 'drop&dip';
     vm.searchInput = '';
@@ -25,11 +25,26 @@ angular.module('app').controller("MainController", function($timeout){
         var blob = new Blob([JSON.stringify(vm.notes)], {type: 'application/json; charset=utf-8;'});
         window.location.href = (window.URL || window.webkitURL).createObjectURL( blob );
     };
-    
-    vm.uploadToCloud = function(){
-        vm.login = true;
-        console.log('UPLOADED');
+    vm.loginFormData = {};
+    vm.showLogin = function(){
+        vm.loginForm = true;
+    };
+    vm.login = function(){
+        login.login(vm.loginFormData).then(function(response){
+            vm.loginForm = false;
+            vm.loggedIn = true;
+            console.log(response);
+        })
+    };
+    vm.logout = function(){
+        logout.then(function(response){
+            console.log(response);
+            vm.loggedIn = false;
+        },
+        function(err){
+            console.log(err);
+        })
     };
     
 
-});
+}]);

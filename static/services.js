@@ -1,11 +1,26 @@
-app.factory('login', ['$resource', function($resource){
-   return {
-       query: function(username) {
-              return $resource('/api/login', {}, {
-                     query: { 
-                         method: 'POST', 
-                         params: {username:username}, 
-                         isArray: false }}).query();
-        }
-   }
+app.factory('login', ['$http', function($http){
+   return{ 
+      login: function(formData){ 
+          return $http.post('/api/login', JSON.stringify(formData))
+                    .then(function(response){
+                        return response.data;
+                    },
+                    function(error){
+                        console.log(error.data);
+                    });
+      }
+     
+   };
+   
+}]);
+
+app.factory('logout', ['$http', function($http){
+    return $http.get('/api/logout')
+        .then(function(response){
+          return response.data;
+      },
+      function(err){
+          console.log(err)
+      })  
+    
 }]);

@@ -4,7 +4,7 @@ import json
 from contextlib import closing
 
 from flask import Flask, request, session, g, redirect, url_for, \
-     abort, render_template, flash
+     abort, render_template, flash, jsonify
 
 # configuration
 DATABASE = '/tmp/flaskr.db'
@@ -59,27 +59,34 @@ def add_entry():
     flash('New entry was successfully posted')
     return 'OK'
     
+@app.route('/api/dump', methods=['POST'])
+def dump_data():
+    if request.method == 'POST' and session.get('logged_in'):
+        pass
+    
     
 @app.route('/api/login', methods=['POST'])
 def login():
     error = None
     if request.method == 'POST':
-        cur = g.db.execute('SELECT EXISTS(SELECT 1 FROM users WHERE username="{0}" LIMIT 1)'.format(request.form['username']))
+        cur = g.db.execute('SELECT EXISTS(SELECT 1 FROM users WHERE username="{0}" LIMIT 1)'.format(request.json['username']))
         if cur.fetchall()[0][0] == 1:
-            cur = g.db.execute('select text from entries where username="{0}" order by id desc'.format(request.form['username']))
-            entries = [dict(text=entry[0]) for entry in cur.fetchall()]
-            session['entries'] = entries
+            cur = g.db.execute('select text from entries where username="{0}" order by id desc'.format(request.json['username']))
+            result = {'result': 'EXISTS'}
+            result['data'] = [entry[0] for entry in cur.fetchall()]
+            session['entries'] = result['data']
             session['logged_in'] = True
-            session['username'] = request.form['username']
+            session['username'] = request.json['username']
             flash('Log successfully')
-            return 'EXISTS'
+            return jsonify(result)
         else:
-            g.db.execute('insert into users (username) values (?)', [request.form['username']])
+            g.db.execute('insert into users (username) values (?)', [request.json['username']])
             g.db.commit()
             session['logged_in'] = True
-            session['username'] = request.form['username']
+            session['username'] = request.json['username']
             flash('new {0} user created!'.format(session['username']))
-            return 'NEW'
+            result = {'result': 'NEW'}
+            return jsonify(result)
 
 @app.route('/api/logout')
 def logout():

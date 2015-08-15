@@ -3,12 +3,13 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>drop&dip</title>
-    <link rel="icon" href="dropdip.png" sizes="32x32">
+    <link rel="icon" href="/static/dropdip.png" sizes="32x32">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.4/angular.min.js"></script>
-    <script src="/static/app.js"></script>
-    <script src="/static/main.ctrl.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.4/angular.min.js"></script>
+    <script type="text/javascript" src="/static/app.js"></script>
+    <script type="text/javascript" src="/static/main.ctrl.js"></script>
+    <script type="text/javascript" src="/static/services.js"></script>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -27,20 +28,27 @@
     </form>
     <div class="alert alert-success" ng-show="main.noteAdded" class="ng-hide"><strong>Dipset!</strong></div>
     <div class="page-header">
-        drops
+        <a class="glyphicon glyphicon-log-out" ng-click="main.logout()" ng-show="main.loggedIn"></a>
         <a class="glyphicon glyphicon-save" ng-click="main.download()" ng-show="main.notes.length > 0"></a>
-        <a class="glyphicon glyphicon-cloud-upload" aria-hidden="true" ng-click="main.uploadToCloud()"></a>
+        <a class="glyphicon glyphicon-log-in" aria-hidden="true" ng-click="main.showLogin()" ng-show="!(main.loggedIn)"></a>
+        <a class="glyphicon glyphicon-cloud-upload" aria-hidden="true" ng-click="main.upload()" ng-show="main.loggedIn"></a>
         </div>
-    <div class="panel" id="loginForm" ng-show="main.login">
-        <form method="POST" action="/api/login">
+    <div class="panel" id="loginForm" ng-show="main.loginForm">
+        <form method="POST">
         <div class="input-group col-lg-6">
           <span class="input-group-addon">@</span>
-          <input type="text" name="username" class="form-control" placeholder="username" aria-describedby="sizing-addon2">
+          <input type="text" name="username" class="form-control" 
+          placeholder="username" aria-describedby="sizing-addon2" ng-model="main.loginFormData.username">
+          
         </div>
+        <input type="submit" name="Submit" ng-click="main.login()"/>
         </form>
     </div>
     </br>
+    <span class="label label-info" ng-show="main.loggedIn">Cloud Sync</span>
+    <span class="label label-success" ng-show="!(main.loggedIn)">LocalStorage Sync</span>
     <div class="well">
+        
     <div class="input-group" ng-show="main.notes.length > 0">
       <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
       <input type="text" class="form-control" ng-model="searchNote">
@@ -49,7 +57,7 @@
     
     <ul class="list-group" ng-repeat="note in main.notes | filter:searchNote | orderBy: 'date':true track by $id($index)">
         <li class="list-group-item">{{note.content}}<span class="badge right">{{note.date | date:'medium'}}</span>
-        <a class="badge right" ng-click="main.delete(note)">Delete</a></li>
+        <a class="badge right" ng-click="main.delete(note)"><span class="glyphicon glyphicon-trash"></span></a></li>
         </ul>
     </div>
     </div>
