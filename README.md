@@ -1,3 +1,3 @@
-A local storage solution for simple note saving.
+A local storage solution for simple note saving (with DB support).
 
-http://exp0nge.github.io/drop-and-dipset/
+http://dropdip-exp0nge.c9.io/
