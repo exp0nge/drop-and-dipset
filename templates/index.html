@@ -46,6 +46,7 @@
         </form>
     </div>
     </br>
+    <span class="label label-primary" ng-show="main.loggedIn" ng-bind="main.username"></span>
     <span class="label label-info" ng-show="main.loggedIn">Cloud Sync</span>
     <span class="label label-success" ng-show="!(main.loggedIn)">LocalStorage Sync</span>
     <div class="well">

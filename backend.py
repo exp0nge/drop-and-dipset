@@ -9,7 +9,7 @@ from flask import Flask, request, session, g, redirect, url_for, \
 # configuration
 DATABASE = '/tmp/flaskr.db'
 DEBUG = True
-SECRET_KEY = 'development key'
+SECRET_KEY = '309cd3800aacbd003ac36199fa537295'
 
 # create our little application :)
 app = Flask(__name__)
@@ -39,7 +39,7 @@ def index():
     if session.get('logged_in'):
         cur = g.db.execute('select text from entries where username="{0}" order by id desc'.format(session.get('username')))
         entries = [dict(text=entry[0]) for entry in cur.fetchall()]
-        return render_template('index.html', entries=entries, username=session.get('username'))
+        return render_template('index.html', entries=entries)
     else:
         return render_template('index.html')
         
@@ -90,9 +90,15 @@ def login():
 
 @app.route('/api/logout')
 def logout():
-    session.pop('logged_in', None)
-    flash('You were logged out')
-    return 'OK'
+    session.clear()
+    return 'LOGGED_OUT'
+    
+@app.route('/api/logstatus', methods=['GET'])
+def log_status():
+    if session.get('logged_in'):
+        return jsonify({'status': 'TRUE', 'username': session.get('username')})
+    else:
+        return jsonify({'status': 'FALSE'})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=8080)

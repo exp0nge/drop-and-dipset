@@ -7,6 +7,7 @@ app.factory('login', ['$http', function($http){
                     },
                     function(error){
                         console.log(error.data);
+                        return error;
                     });
       }
      
@@ -20,7 +21,19 @@ app.factory('logout', ['$http', function($http){
           return response.data;
       },
       function(err){
-          console.log(err)
+          console.log(err);
+            return err;
       })  
     
+}]);
+
+app.factory('logstatus', ['$http', function($http){
+    return $http.get('/api/logstatus')
+        .then(function(response){
+            return response.data;
+        },
+        function(err){
+            console.log(err);
+            return err;
+        })
 }]);

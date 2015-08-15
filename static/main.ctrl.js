@@ -1,9 +1,23 @@
-app.controller("MainController", ['$timeout', 'login', 'logout', function($timeout, login, logout){
+app.controller("MainController", ['$timeout', 'login', 'logout', 'logstatus', 
+
+function($timeout, login, logout, logstatus){
     var vm = this;
     vm.title = 'drop&dip';
     vm.searchInput = '';
     vm.notes = [];
     vm.noteAdded = false;
+    logstatus.then(function(response){
+        if (response.status === 'TRUE'){
+            vm.loggedIn = true;
+            vm.username = response.username;
+        }
+        else{
+            vm.loggedIn = false;
+        }
+    },
+    function(err){
+        console.log(err)
+    });
     var savedNotes = JSON.parse(window.localStorage.getItem('storedNotes'));
     if(savedNotes){
         vm.notes = savedNotes;
@@ -30,17 +44,23 @@ app.controller("MainController", ['$timeout', 'login', 'logout', function($timeo
         login.login(vm.loginFormData).then(function(response){
             vm.loginForm = false;
             vm.loggedIn = true;
+            logstatus.then(function(response){
+                        vm.username = response.username;
+                },
+                function(err){
+                    console.log(err)
+                });
             console.log(response);
         })
     };
     vm.logout = function(){
         logout.then(function(response){
-            console.log(response);
             vm.loggedIn = false;
+            console.log(response);
         },
         function(err){
             console.log(err);
-        })
+        });
     };
     
 
