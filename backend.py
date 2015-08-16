@@ -46,24 +46,21 @@ def index():
 @app.route('/api/notes', methods=['GET'])
 def get_notes():
     if session.get('logged_in'):
-        cur = g.db.execute('select text from entries where username="{0}" order by id desc'.format(session.get('username')))
+        cur = g.db.execute('select text, date from entries where username="{0}" order by id desc'.format(session.get('username')))
         return json.dumps(cur.fetchall())
+    else:
+        abort(401)
     
 @app.route('/api/add', methods=['POST'])
-def add_entry():
+def add_note():
     if not session.get('logged_in'):
         abort(401)
-    g.db.execute('insert into entries (username, text) values (?, ?)', 
-                    [session.get('username'), request.form['text']])
+    g.db.execute('insert into entries (username, text, date) values (?, ?, ?)', 
+        [session.get('username'), request.json['content'], request.json['date']])
     g.db.commit()
     flash('New entry was successfully posted')
-    return 'OK'
-    
-@app.route('/api/dump', methods=['POST'])
-def dump_data():
-    if request.method == 'POST' and session.get('logged_in'):
-        pass
-    
+    return jsonify({'status': 'OK'})
+
     
 @app.route('/api/login', methods=['POST'])
 def login():

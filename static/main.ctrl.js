@@ -1,6 +1,6 @@
-app.controller("MainController", ['$timeout', 'login', 'logout', 'logstatus', 
+app.controller("MainController", ['$timeout', 'login', 'logout', 'logstatus', 'add', 'getNotes',
 
-function($timeout, login, logout, logstatus){
+function($timeout, login, logout, logstatus, add, getNotes){
     var vm = this;
     vm.title = 'drop&dip';
     vm.searchInput = '';
@@ -25,9 +25,19 @@ function($timeout, login, logout, logstatus){
     vm.newNote = {};
     vm.addNote = function(){
         vm.newNote.date = new Date();
+        // Add to database
+        if (vm.loggedIn){
+            console.log(vm.newNote);
+            add.new(vm.newNote).then(function(response){
+                vm.newNote.cloud = true;
+            },
+            function(err){
+                console.log(err);
+            });
+        }
         vm.notes.push(vm.newNote);
-        vm.newNote = {};
         window.localStorage.setItem('storedNotes', JSON.stringify(vm.notes));
+        vm.newNote = {};
         vm.noteAdded = true;
         $timeout(function(){vm.noteAdded = false;}, 3000);
     };
@@ -56,7 +66,33 @@ function($timeout, login, logout, logstatus){
     vm.logout = function(){
         logout.then(function(response){
             vm.loggedIn = false;
-            console.log(response);
+        },
+        function(err){
+            console.log(err);
+        });
+    };
+    
+    vm.getNotes = function(){
+        getNotes.notes().then(function(response){
+            var state;
+            for(var key in response){
+                if(response.hasOwnProperty(key)){
+                    state = true;
+                    for(var j = 0; j < vm.notes.length; j++){
+                        if(j.date === response[key][1]){
+                            state = false;
+                        }
+                    }
+                    if(state){
+                        vm.notes.push({
+                            'content': response[key][0], 
+                            'date': response[key][1], 
+                            'cloud': true
+                        });
+                    }
+                }
+            }
+            window.localStorage.setItem('storedNotes', JSON.stringify(vm.notes));
         },
         function(err){
             console.log(err);

@@ -23,7 +23,7 @@ app.factory('logout', ['$http', function($http){
       function(err){
           console.log(err);
             return err;
-      })  
+      });  
     
 }]);
 
@@ -35,5 +35,34 @@ app.factory('logstatus', ['$http', function($http){
         function(err){
             console.log(err);
             return err;
-        })
+        });
+}]);
+
+app.factory('add', ['$http', function($http){
+    return {
+        new: function(note) {
+            return $http.post('/api/add', JSON.stringify(note))
+                .then(function(response){
+                    return response.data;
+                },
+                function(err){
+                    return err;
+                });
+            
+        }
+    }
+}]);
+
+app.factory('getNotes', ['$http', function($http){
+    return {
+        notes: function(){
+            return $http.get('/api/notes')
+            .then(function(response){
+                return response.data;
+            },
+                function(err){
+                    return err;
+                });
+        }
+    }
 }]);

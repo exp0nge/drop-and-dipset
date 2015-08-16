@@ -33,7 +33,7 @@
         <a class="glyphicon glyphicon-log-in" aria-hidden="true" ng-click="main.loginForm = !(main.loginForm)" ng-show="!(main.loggedIn)"></a>
         <a class="glyphicon glyphicon-log-out" ng-click="main.logout()" ng-show="main.loggedIn"></a>
         <a class="glyphicon glyphicon-save" ng-click="main.download()" ng-show="main.notes.length > 0"></a>
-        <a class="glyphicon glyphicon-cloud-upload" aria-hidden="true" ng-click="main.upload()" ng-show="main.loggedIn"></a>
+        <a class="glyphicon glyphicon-cloud-upload" ng-click="main.getNotes()" aria-hidden="true" ng-show="main.loggedIn"></a>
         </div>
     <div class="panel" id="loginForm" ng-show="main.loginForm">
         <form method="POST" ng-submit="main.login()">
@@ -59,7 +59,12 @@
     
     <ul class="list-group" ng-repeat="note in main.notes | filter:searchNote | orderBy: 'date':true track by $id($index)">
         <li class="list-group-item">{{note.content}}<span class="badge right">{{note.date | date:'medium'}}</span>
-        <a class="badge right" ng-click="main.delete(note)"><span class="glyphicon glyphicon-trash"></span></a></li>
+        <a class="badge right" ng-click="main.delete(note)">
+            <span class="glyphicon glyphicon-trash"></span></a>
+            <a class="badge left" ng-show="note.cloud">
+                <span class="glyphicon glyphicon-cloud"></span>
+                </a>
+        </li>
         </ul>
     </div>
     </div>
