@@ -6,6 +6,7 @@ function($timeout, login, logout, logstatus, noteDB, getNotes){
     vm.searchInput = '';
     vm.notes = [];
     vm.noteAdded = false;
+    vm.loggedIn = false;
     
     logstatus.then(function(response){
             if (response['status'] === 'TRUE'){
@@ -30,16 +31,24 @@ function($timeout, login, logout, logstatus, noteDB, getNotes){
         if (vm.loggedIn){
             noteDB.new(vm.newNote).then(function(response){
                 vm.newNote.cloud = true;
+                vm.notes.push(vm.newNote);
+                window.localStorage.setItem('storedNotes', JSON.stringify(vm.notes));
+                vm.newNote = {};
+                vm.noteAdded = true;
+                $timeout(function(){vm.noteAdded = false;}, 3000);
             },
             function(err){
                 console.log(err);
             });
         }
-        vm.notes.push(vm.newNote);
-        window.localStorage.setItem('storedNotes', JSON.stringify(vm.notes));
-        vm.newNote = {};
-        vm.noteAdded = true;
-        $timeout(function(){vm.noteAdded = false;}, 3000);
+        else{
+            vm.notes.push(vm.newNote);
+            window.localStorage.setItem('storedNotes', JSON.stringify(vm.notes));
+            vm.newNote = {};
+            vm.noteAdded = true;
+            $timeout(function(){vm.noteAdded = false;}, 3000);
+        }
+        
     };
     vm.delete = function(note){
         if(note.cloud){
