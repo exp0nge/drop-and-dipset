@@ -1,23 +1,24 @@
-app.controller("MainController", ['$timeout', 'login', 'logout', 'logstatus', 'add', 'getNotes',
+app.controller("MainController", ['$timeout', 'login', 'logout', 'logstatus', 'noteDB', 'getNotes',
 
-function($timeout, login, logout, logstatus, add, getNotes){
+function($timeout, login, logout, logstatus, noteDB, getNotes){
     var vm = this;
     vm.title = 'drop&dip';
     vm.searchInput = '';
     vm.notes = [];
     vm.noteAdded = false;
+    
     logstatus.then(function(response){
-        if (response.status === 'TRUE'){
-            vm.loggedIn = true;
-            vm.username = response.username;
-        }
-        else{
-            vm.loggedIn = false;
-        }
-    },
-    function(err){
-        console.log(err)
-    });
+            if (response['status'] === 'TRUE'){
+                vm.loggedIn = true;
+                vm.username = response.username;
+            }
+            else{
+                vm.loggedIn = false;
+            }
+            }, function(err){
+                console.log(err);
+        });
+
     var savedNotes = JSON.parse(window.localStorage.getItem('storedNotes'));
     if(savedNotes){
         vm.notes = savedNotes;
@@ -27,8 +28,7 @@ function($timeout, login, logout, logstatus, add, getNotes){
         vm.newNote.date = new Date();
         // Add to database
         if (vm.loggedIn){
-            console.log(vm.newNote);
-            add.new(vm.newNote).then(function(response){
+            noteDB.new(vm.newNote).then(function(response){
                 vm.newNote.cloud = true;
             },
             function(err){
@@ -42,6 +42,14 @@ function($timeout, login, logout, logstatus, add, getNotes){
         $timeout(function(){vm.noteAdded = false;}, 3000);
     };
     vm.delete = function(note){
+        if(note.cloud){
+            noteDB.delete(note.date).then(function(response){
+                    console.log(response);
+                },
+                function(err){
+                    console.log(err);
+                });
+        }
         vm.notes.splice(vm.notes.indexOf(note), 1);
         window.localStorage.setItem('storedNotes', JSON.stringify(vm.notes));
     };
@@ -54,13 +62,7 @@ function($timeout, login, logout, logstatus, add, getNotes){
         login.login(vm.loginFormData).then(function(response){
             vm.loginForm = false;
             vm.loggedIn = true;
-            logstatus.then(function(response){
-                        vm.username = response.username;
-                },
-                function(err){
-                    console.log(err)
-                });
-            console.log(response);
+            vm.username = response.username;
         })
     };
     vm.logout = function(){

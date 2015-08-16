@@ -36,6 +36,8 @@ def teardown_request(exception):
         
 @app.route('/')
 def index():
+    if request.cookies.get('session'):
+        session['logged_in'] = True
     if session.get('logged_in'):
         cur = g.db.execute('select text from entries where username="{0}" order by id desc'.format(session.get('username')))
         entries = [dict(text=entry[0]) for entry in cur.fetchall()]
@@ -55,13 +57,22 @@ def get_notes():
 def add_note():
     if not session.get('logged_in'):
         abort(401)
-    g.db.execute('insert into entries (username, text, date) values (?, ?, ?)', 
-        [session.get('username'), request.json['content'], request.json['date']])
-    g.db.commit()
-    flash('New entry was successfully posted')
-    return jsonify({'status': 'OK'})
+    else:
+        g.db.execute('insert into entries (username, text, date) values (?, ?, ?)', 
+            [session.get('username'), request.json['content'], request.json['date']])
+        g.db.commit()
+        flash('New entry was successfully posted')
+        return jsonify({'status': 'OK'})
 
-    
+@app.route('/api/delete/<date>', methods=['DELETE'])
+def delete_note(date):
+    if not session.get('logged_in'):
+        abort(401)
+    else:
+        g.db.execute('DELETE FROM entries WHERE date="{0}"'.format(date))
+        g.db.commit()
+        return jsonify({'status': 'OK'})
+
 @app.route('/api/login', methods=['POST'])
 def login():
     error = None
@@ -69,7 +80,7 @@ def login():
         cur = g.db.execute('SELECT EXISTS(SELECT 1 FROM users WHERE username="{0}" LIMIT 1)'.format(request.json['username']))
         if cur.fetchall()[0][0] == 1:
             cur = g.db.execute('select text from entries where username="{0}" order by id desc'.format(request.json['username']))
-            result = {'result': 'EXISTS'}
+            result = {'result': 'EXISTS', 'username': request.json['username']}
             result['data'] = [entry[0] for entry in cur.fetchall()]
             session['entries'] = result['data']
             session['logged_in'] = True
@@ -82,7 +93,7 @@ def login():
             session['logged_in'] = True
             session['username'] = request.json['username']
             flash('new {0} user created!'.format(session['username']))
-            result = {'result': 'NEW'}
+            result = {'result': 'NEW', 'username': request.json['username']}
             return jsonify(result)
 
 @app.route('/api/logout')
@@ -93,7 +104,9 @@ def logout():
 @app.route('/api/logstatus', methods=['GET'])
 def log_status():
     if session.get('logged_in'):
-        return jsonify({'status': 'TRUE', 'username': session.get('username')})
+        return jsonify({
+            'status': 'TRUE', 
+            'username': session.get('username')})
     else:
         return jsonify({'status': 'FALSE'})
 

@@ -38,7 +38,7 @@ app.factory('logstatus', ['$http', function($http){
         });
 }]);
 
-app.factory('add', ['$http', function($http){
+app.factory('noteDB', ['$http', function($http){
     return {
         new: function(note) {
             return $http.post('/api/add', JSON.stringify(note))
@@ -48,7 +48,15 @@ app.factory('add', ['$http', function($http){
                 function(err){
                     return err;
                 });
-            
+        },
+        delete: function(date){
+            return $http.delete('/api/delete/' + 'date')
+                .then(function(response){
+                    return response.data;
+                },
+                function(err){
+                    return err.data;
+                });
         }
     }
 }]);
