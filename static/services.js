@@ -49,8 +49,8 @@ app.factory('noteDB', ['$http', function($http){
                     return err;
                 });
         },
-        delete: function(date){
-            return $http.delete('/api/delete/' + 'date')
+        delete: function(noteID){
+            return $http.delete('/api/delete/' + noteID)
                 .then(function(response){
                     return response.data;
                 },

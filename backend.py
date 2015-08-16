@@ -48,7 +48,7 @@ def index():
 @app.route('/api/notes', methods=['GET'])
 def get_notes():
     if session.get('logged_in'):
-        cur = g.db.execute('select text, date from entries where username="{0}" order by id desc'.format(session.get('username')))
+        cur = g.db.execute('select text, date, id from entries where username="{0}" order by id desc'.format(session.get('username')))
         return json.dumps(cur.fetchall())
     else:
         abort(401)
@@ -64,12 +64,13 @@ def add_note():
         flash('New entry was successfully posted')
         return jsonify({'status': 'OK'})
 
-@app.route('/api/delete/<date>', methods=['DELETE'])
-def delete_note(date):
+@app.route('/api/delete/<note_id>', methods=['DELETE'])
+def delete_note(note_id):
     if not session.get('logged_in'):
         abort(401)
     else:
-        g.db.execute('DELETE FROM entries WHERE date="{0}"'.format(date))
+        print note_id
+        g.db.execute('DELETE FROM entries WHERE id="{0}"'.format(note_id))
         g.db.commit()
         return jsonify({'status': 'OK'})
 

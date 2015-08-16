@@ -31,6 +31,8 @@ function($timeout, login, logout, logstatus, noteDB, getNotes){
         if (vm.loggedIn){
             noteDB.new(vm.newNote).then(function(response){
                 vm.newNote.cloud = true;
+                vm.newNote.id = response.id;
+                console.log(vm.newNote.id);
                 vm.notes.push(vm.newNote);
                 window.localStorage.setItem('storedNotes', JSON.stringify(vm.notes));
                 vm.newNote = {};
@@ -52,7 +54,7 @@ function($timeout, login, logout, logstatus, noteDB, getNotes){
     };
     vm.delete = function(note){
         if(note.cloud){
-            noteDB.delete(note.date).then(function(response){
+            noteDB.delete(note.id).then(function(response){
                     console.log(response);
                 },
                 function(err){
@@ -72,10 +74,11 @@ function($timeout, login, logout, logstatus, noteDB, getNotes){
             vm.loginForm = false;
             vm.loggedIn = true;
             vm.username = response.username;
-        })
+        });
     };
     vm.logout = function(){
         logout.then(function(response){
+            console.log(response);
             vm.loggedIn = false;
         },
         function(err){
@@ -98,6 +101,7 @@ function($timeout, login, logout, logstatus, noteDB, getNotes){
                         vm.notes.push({
                             'content': response[key][0], 
                             'date': response[key][1], 
+                            'id': response[key][2],
                             'cloud': true
                         });
                     }
