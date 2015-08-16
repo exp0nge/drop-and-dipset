@@ -79,7 +79,7 @@ function($timeout, login, logout, logstatus, add, getNotes){
                 if(response.hasOwnProperty(key)){
                     state = true;
                     for(var j = 0; j < vm.notes.length; j++){
-                        if(j.date === response[key][1]){
+                        if(vm.notes[j].date === response[key][1]){
                             state = false;
                         }
                     }
@@ -93,6 +93,8 @@ function($timeout, login, logout, logstatus, add, getNotes){
                 }
             }
             window.localStorage.setItem('storedNotes', JSON.stringify(vm.notes));
+            vm.noteAdded = true;
+            $timeout(function(){vm.noteAdded = false;}, 3000);
         },
         function(err){
             console.log(err);
