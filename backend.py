@@ -36,14 +36,16 @@ def teardown_request(exception):
         
 @app.route('/')
 def index():
+    logged_in = False
     if request.cookies.get('session'):
         session['logged_in'] = True
     if session.get('logged_in'):
         cur = g.db.execute('select text from entries where username="{0}" order by id desc'.format(session.get('username')))
         entries = [dict(text=entry[0]) for entry in cur.fetchall()]
-        return render_template('index.html', entries=entries)
+        logged_in = True
+        return render_template('index.html', entries=entries, logged_in=logged_in)
     else:
-        return render_template('index.html')
+        return render_template('index.html', logged_in=logged_in)
         
 @app.route('/api/notes', methods=['GET'])
 def get_notes():
@@ -100,6 +102,7 @@ def login():
 @app.route('/api/logout')
 def logout():
     session.clear()
+    session.pop('logged_in', None)
     return 'LOGGED_OUT'
     
 @app.route('/api/logstatus', methods=['GET'])

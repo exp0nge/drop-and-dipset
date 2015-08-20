@@ -16,11 +16,10 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-    {% raw %}
 <body ng-app="app" ng-controller="MainController as main">
  <div class="container">
     <h1><img src="/static/suitcase.png" height="60px" widith="60px"></img>
-    {{main.title}}</h1>
+    //main.title//</h1>
     <form name="main.addForm" class="form" ng-submit="main.addNote()">
         <div class="form-group">
             <label><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Note:</label>
@@ -45,7 +44,7 @@
     </br>
     <span class="label label-primary" ng-show="main.loggedIn" ng-bind="main.username"></span>
     <span class="label label-info" ng-show="main.loggedIn">Cloud Sync</span>
-    <span class="label label-success" ng-show="main.loggedIn">LocalStorage Sync</span>
+    <span class="label label-success">LocalStorage Sync</span>
     <div class="well">
         
     <div class="input-group" ng-show="main.notes.length > 0">
@@ -55,7 +54,8 @@
     </br>
     
     <ul class="list-group" ng-repeat="note in main.notes | filter:searchNote | orderBy: 'date':true track by $id($index)">
-        <li class="list-group-item">{{note.content}}<span class="badge right">{{note.date | date:'medium'}}</span>
+        <li class="list-group-item" style="word-wrap: break-word">//note.content//
+        <span class="badge right">//note.date | date:'medium'//</span>
         <a class="badge right" ng-click="main.delete(note)">
             <span class="glyphicon glyphicon-trash"></span></a>
             <a class="badge left" ng-show="note.cloud">
@@ -65,7 +65,6 @@
         </ul>
     </div>
     </div>
-    {% endraw %}
     
 </body>
 </html>
