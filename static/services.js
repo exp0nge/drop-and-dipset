@@ -6,7 +6,6 @@ app.factory('login', ['$http', function($http){
                         return response.data;
                     },
                     function(error){
-                        console.log(error.data);
                         return error;
                     });
       }
@@ -21,8 +20,7 @@ app.factory('logout', ['$http', function($http){
           return response.data;
       },
       function(err){
-          console.log(err);
-            return err;
+        return err.data;
       });  
     
 }]);
@@ -57,12 +55,7 @@ app.factory('noteDB', ['$http', function($http){
                 function(err){
                     return err.data;
                 });
-        }
-    }
-}]);
-
-app.factory('getNotes', ['$http', function($http){
-    return {
+        },
         notes: function(){
             return $http.get('/api/notes')
             .then(function(response){

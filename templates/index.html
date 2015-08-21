@@ -29,10 +29,10 @@
     </form>
     <div class="alert alert-success" ng-show="main.noteAdded" class="ng-hide"><strong>Dipset!</strong></div>
     <div class="page-header">
-        <a class="fa fa-sign-in" aria-hidden="true" ng-click="main.loginForm = !(main.loginForm)" ng-show="!(main.loggedIn)"></a>
-        <a class="fa fa-sign-out" ng-click="main.logout()" ng-show="main.loggedIn"></a>
-        <a class="fa fa-download" ng-click="main.download()" ng-show="main.notes.length > 0"></a>
-        <a class="fa fa-cloud-download" ng-click="main.getNotes()" aria-hidden="true" ng-show="main.loggedIn"></a>
+        <a class="fa fa-sign-in fa-lg" aria-hidden="true" ng-click="main.loginForm = !(main.loginForm)" ng-show="!(main.loggedIn)"></a>
+        <a class="fa fa-sign-out fa-lg" ng-click="main.logout()" ng-show="main.loggedIn"></a>
+        <a class="fa fa-download fa-lg" ng-click="main.download()" ng-show="main.notes.length > 0"></a>
+        <a class="fa fa-cloud-download fa-lg" ng-click="main.getNotes()" aria-hidden="true" ng-show="main.loggedIn"></a>
         </div>
     <div class="panel" id="loginForm" ng-show="main.loginForm">
         <form method="POST" ng-submit="main.login()">
@@ -58,12 +58,16 @@
         <li class="list-group-item" style="word-wrap: break-word">//note.content//
         <span class="badge right">//note.date | date:'medium'//</span>
         <a class="badge right" ng-click="main.delete(note)">
-            <span class="fa fa-trash-o"></span></a>
+            <span class="fa fa-trash"></span></a>
             <a class="badge left" ng-show="note.cloud">
                 <span class="fa fa-cloud"></span>
                 </a>
         </li>
         </ul>
+    </div>
+    <hr>
+    <div align="center">
+    <a class="fa fa-github-square fa-2x" href="https://github.com/exp0nge"></a>
     </div>
     </div>
     

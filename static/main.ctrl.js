@@ -1,6 +1,6 @@
-app.controller("MainController", ['$timeout', 'login', 'logout', 'logstatus', 'noteDB', 'getNotes',
+app.controller("MainController", ['$timeout', 'login', 'logout', 'logstatus', 'noteDB',
 
-function($timeout, login, logout, logstatus, noteDB, getNotes){
+function($timeout, login, logout, logstatus, noteDB){
     var vm = this;
     vm.title = 'drop&dip';
     vm.searchInput = '';
@@ -87,7 +87,7 @@ function($timeout, login, logout, logstatus, noteDB, getNotes){
     };
     
     vm.getNotes = function(){
-        getNotes.notes().then(function(response){
+        noteDB.notes().then(function(response){
             var state;
             for(var key in response){
                 if(response.hasOwnProperty(key)){
